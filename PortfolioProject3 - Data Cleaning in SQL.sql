@@ -1,4 +1,4 @@
--- Data Cleaning in SQL
+-- Data Cleaning Portfolio Project in SQL
 SELECT *
 FROM [ProjectPortfolio-3].[dbo].[Housingdata] 
 
