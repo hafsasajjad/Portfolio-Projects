@@ -1,0 +1,37 @@
+from bs4 import BeautifulSoup
+import requests
+url = 'https://en.wikipedia.org/wiki/List_of_largest_companies_in_the_United_States_by_revenue'
+page = requests.get(url)
+soup = BeautifulSoup(page.text, 'html')
+print(soup)
+table_last = soup.find_all('table')[3]
+print(table_last)
+#Another way to pull the same table
+#soup.find('table', class_ ="wikitable sortable")
+table = soup.find_all('table')[1]
+print(table)
+table_headers = table.find_all('th')
+print(table_headers)
+table_headers_cleaned = [header.text.strip() for header in table_headers] #The .strip() method works only on strings
+print(table_headers_cleaned)
+# Longer way to create a new list with some edits, using an old list
+table_headers_cleaned = []
+for header in table_headers:
+    table_headers_cleaned.append(header.text.strip())
+print(table_headers_cleaned)
+import pandas as pd
+dataframe = pd.DataFrame(columns = table_headers_cleaned)
+dataframe
+column_data = table.find_all('tr')
+column_data
+for row in column_data:
+    row_data = row.find_all('td')
+    individual_row_data = [data.text.strip() for data in row_data]
+    print(individual_row_data)
+for row in column_data[1:]:
+    row_data = row.find_all('td')
+    individual_row_data = [data.text.strip() for data in row_data]
+    length = len(dataframe)
+    dataframe.loc[length] = individual_row_data 
+dataframe
+dataframe.to_csv(r'C:\Users\lenovo\Desktop\Personal\Portfolio Projects\Web Scrapping Using Python\Output Folder\Companies Table.csv', index = False)
